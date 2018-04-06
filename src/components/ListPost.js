@@ -1,6 +1,8 @@
 import React from 'react';
 import Post from './Post'
 import { connect } from 'react-redux'
+import sortBy from 'sort-by';
+
 
 
 const ListPost = ({ posts, activeCategory }) =>
@@ -11,9 +13,9 @@ const ListPost = ({ posts, activeCategory }) =>
             )}
         </div>
     )
-function mapStateToProps({ posts, activeCategory }) {    
+function mapStateToProps({ posts, activeCategory },{orderBy}) {    
     return {
-        posts: posts,
+        posts: posts.sort(sortBy(orderBy)),
     }
 }
 export default connect(
