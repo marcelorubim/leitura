@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { Menu, Button, Container, Divider, Form } from 'semantic-ui-react';
-import { connect } from 'react-redux'
-import { fetchCategories, fetchPosts } from '../actions'
-import { Link } from 'react-router-dom'
-import ListPost from './ListPost'
+import { Route,Switch } from 'react-router-dom';
+import Header from './Header';
+import ListPost from './ListPost';
+import PostDetail from './PostDetail';
+import {fetchCategories,fetchPosts,selectCategory} from '../actions'
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom'
+
+
 
 class App extends Component {
   state = {
@@ -12,64 +16,46 @@ class App extends Component {
   sortBy = (e, { value }) => {
     this.setState({ sortBy: value })
   }
+  
   componentDidMount() {
-    const { receiveCategories, receivePosts } = this.props;
+    const { receiveCategories, receivePosts, activeCategory, changeCategory } = this.props;
     receiveCategories();
     receivePosts();
+    changeCategory(activeCategory);
+
   }
   render() {
-    const { categories, activeCategory } = this.props;
-    const orderOptions = [
-      { key: 'v', text: 'Score', value: 'voteScore' },
-      { key: 't', text: 'Date', value: 'timestamp' },
-    ]
+    const { categories, changeCategory } = this.props;
     return (
       <div>
-        <Menu inverted>
-          <Container>
-            <Menu.Item active={typeof activeCategory === 'undefined'}>
-              <Link to='/' >All</Link>
-            </Menu.Item>
-            {categories.map((c, index) =>
-              <Menu.Item key={index} active={activeCategory === c.name}>
-                <Link to={c.path}>{c.name}</Link>
-              </Menu.Item>
-            )}
-            <Menu.Menu position='right'>
-              <Menu.Item>
-                <Button size='mini' primary>New Post</Button>
-              </Menu.Item>
-              <Menu.Item>
-                <Form.Select options={orderOptions} onChange={this.sortBy} placeholder='Order By' orderBy={this.state.sortBy} />
-              </Menu.Item>
+        <Header />
+        <Switch>
+          <Route exact path='/postDetail/:postId?'>
+            <PostDetail />
+          </Route>
+          <Route path="/:activeCategory?" component={ListPost}> 
+          </Route>
 
-            </Menu.Menu>
-          </Container>
-        </Menu>
-        <Container>
-          <Divider />
-
-
-          <ListPost activeCategory={activeCategory} orderBy={this.state.sortBy} />
-        </Container>
+        </Switch>
       </div>
-    );
-  }
-}
-function mapStateToProps({ categories, posts, activeCategory }, ownProps) {
+        );
+      }
+    }
+function mapStateToProps({categories, posts, activeCategory }) {
   return {
-    categories,
-    posts,
-    activeCategory: ownProps.match.params.activeCategory
-  }
-}
+          categories,
+        posts,
+      }
+    }
 function mapDispatchToProps(dispatch) {
   return {
-    receiveCategories: () => dispatch(fetchCategories()),
-    receivePosts: () => dispatch(fetchPosts()),
-  }
-}
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+          receiveCategories: () => dispatch(fetchCategories()),
+        receivePosts: () => dispatch(fetchPosts()),
+        changeCategory: (c) => dispatch(selectCategory(c))
+    
+      }
+    }
+    export default withRouter(connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(App));

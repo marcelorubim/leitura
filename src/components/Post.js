@@ -1,12 +1,14 @@
 import React from 'react';
 import { Button,Segment,Label } from 'semantic-ui-react';
+import { Link } from 'react-router-dom'
+
 
 const Post = ({ post }) => {
     return (
       <Segment.Group key={post.id}>
         <Segment>{post.title}
           <Button floated='right' size='mini' basic color='red'>Delete</Button>
-          <Button floated='right' size='mini' basic color='blue'>Open</Button>
+          <Button floated='right' size='mini' basic color='blue'><Link to={`/postDetail/${post.id}`}>Open</Link></Button>
         </Segment>
         <Segment.Group>
           <Segment>{post.body}</Segment>

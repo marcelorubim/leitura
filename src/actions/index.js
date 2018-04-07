@@ -14,6 +14,7 @@ function receiveCategories(categories){
 }
 
 export function selectCategory(activeCategory){
+    console.log(activeCategory)
     return {
         type: SELECT_CATEGORY,
         activeCategory
