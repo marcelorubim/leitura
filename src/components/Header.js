@@ -14,7 +14,7 @@ const Header = ({ activeCategory, categories,orderBy }) => {
                 </Menu.Item>
                 {categories.map((c, index) =>
                     <Menu.Item key={index} active={activeCategory === c.name}>
-                        <Link to={c.path}>{c.name}</Link>
+                        <Link to={`/${c.path}`}>{c.name}</Link>
                     </Menu.Item>
                 )}
                 <Menu.Menu position='right'>

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Post from './Post'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { withRouter,Link } from 'react-router-dom'
 import { selectCategory } from '../actions'
 import sortBy from 'sort-by';
-import { Form, Container } from 'semantic-ui-react';
+import { Form, Container,Segment,Button } from 'semantic-ui-react';
 
 
 
@@ -25,6 +25,7 @@ class ListPost extends Component {
     }
     render() {
         const { posts, activeCategory } = this.props
+        const postsCategory = posts.sort(sortBy(orderBy)).filter(p => !p.deleted).filter(p => !activeCategory || p.category === activeCategory);
         const { orderBy } = this.state
         const orderOptions = [
             { key: 'v', text: 'Score', value: 'voteScore' },
@@ -33,13 +34,22 @@ class ListPost extends Component {
         return (
             <Container>
                 <Container textAlign='right'>
-                    <Form>
-                        <Form.Select inline options={orderOptions} onChange={this.sortBy} placeholder='Order By' value={orderBy} label='Order By: ' />
-                    </Form>
+                    {postsCategory.length > 0 &&
+                        <Form>
+                            <Form.Select inline options={orderOptions} onChange={this.sortBy} placeholder='Order By' value={orderBy} label='Order By: ' />
+                        </Form>
+                    }
                 </Container>
-
-                {posts.sort(sortBy(orderBy)).filter(p => !p.deleted).filter(p => !activeCategory || p.category === activeCategory).map(p =>
-                    <Post key={p.id} post={p} />
+                {postsCategory.map(p =>
+                    <Segment.Group key={p.id}>
+                        <Segment>
+                         &nbsp;   
+                        <Link to={`/postDetail/${p.id}`}><Button floated='right' size='mini' basic color='blue'>Detail</Button></Link>
+                        </Segment>
+                        <Segment>
+                            <Post post={p} />
+                        </Segment>
+                    </Segment.Group>
                 )}
             </Container>
         )

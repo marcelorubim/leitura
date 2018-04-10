@@ -1,4 +1,4 @@
-import { RECEIVE_CATEGORIES,RECEIVE_POSTS,SELECT_CATEGORY } from '../actions'
+import { RECEIVE_CATEGORIES,RECEIVE_POSTS,SELECT_CATEGORY,FETCH_POST_DETAIL } from '../actions'
 
 const initialState = {
     activeCategory: null,
@@ -22,6 +22,11 @@ const root = (state=initialState,action) => {
             return {
                 ...state,
                 activeCategory:action.activeCategory
+            }
+        case FETCH_POST_DETAIL:
+            return {
+                ...state,
+                postSelected:action.postSelected
             }
         default:
             return state
