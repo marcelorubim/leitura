@@ -1,11 +1,19 @@
-import {fetchCategoriesAPI,fetchAllPostsAPI,fetchPostDetailAPI} from '../api'
+import {fetchCategoriesAPI,fetchAllPostsAPI,fetchPostDetailAPI,fetchCommentsAPI} from '../api'
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const SELECT_CATEGORY = 'SELECT_CATEGORY';
 export const FETCH_POST_DETAIL = 'FETCH_POST_DETAIL';
+export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 
 
+
+function receiveComments(comments){
+    return {
+        type: RECEIVE_COMMENTS,
+        comments
+    };
+}
 
 function receivePostDetail(postSelected){
     return {
@@ -48,4 +56,9 @@ export const fetchPosts = () => dispatch => (
   export const fetchPostDetail = (postId) => dispatch => (
     fetchPostDetailAPI(postId).then((response) => response.json())
     .then((responseJson) => (dispatch(receivePostDetail(responseJson))
+  )))
+
+  export const fetchComments = (postId) => dispatch => (
+    fetchCommentsAPI(postId).then((response) => response.json())
+    .then((responseJson) => (dispatch(receiveComments(responseJson))
   )))

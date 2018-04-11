@@ -1,9 +1,11 @@
-import { RECEIVE_CATEGORIES,RECEIVE_POSTS,SELECT_CATEGORY,FETCH_POST_DETAIL } from '../actions'
+import { RECEIVE_CATEGORIES,RECEIVE_POSTS,SELECT_CATEGORY,FETCH_POST_DETAIL,RECEIVE_COMMENTS } from '../actions'
 
 const initialState = {
     activeCategory: null,
     categories: [],
-    posts: []
+    posts: [],
+    comments: [],
+    postSelected: {}
 }
 
 const root = (state=initialState,action) => {
@@ -27,6 +29,11 @@ const root = (state=initialState,action) => {
             return {
                 ...state,
                 postSelected:action.postSelected
+            }
+        case RECEIVE_COMMENTS:
+            return{
+                ...state,
+                comments:action.comments   
             }
         default:
             return state

@@ -1,17 +1,13 @@
 import React from 'react';
-import { Button,Segment,Label } from 'semantic-ui-react';
+import { Segment, Label} from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 
-
 const Post = ({ post }) => {
-    return (
+  return (
+    <div>
+      <Link to={`/postDetail/${post.id}`}><h2>{post.title}</h2></Link>      
       <Segment.Group key={post.id}>
-        <Segment>{post.title}          
-          <Button floated='right' size='mini' basic color='red'>Delete</Button>
-        </Segment>
-        <Segment.Group>
-          <Segment>{post.body}</Segment>
-        </Segment.Group>
+        <Segment>{post.body}</Segment>
         <Segment.Group horizontal>
           <Segment> <Label>
             Author
@@ -29,10 +25,9 @@ const Post = ({ post }) => {
             Score
       <Label.Detail>{post.voteScore}</Label.Detail>
           </Label></Segment>
-          <Segment><Button circular icon='thumbs up' /><Button circular icon='thumbs down' /></Segment>
-
         </Segment.Group>
       </Segment.Group>
-    )
+    </div>
+  )
 }
 export default Post

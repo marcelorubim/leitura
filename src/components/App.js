@@ -25,7 +25,6 @@ class App extends Component {
 
   }
   render() {
-    const { categories, changeCategory } = this.props;
     return (
       <div>
         <Header />

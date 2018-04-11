@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Button, Container, Divider, Form } from 'semantic-ui-react';
+import { Menu, Button, Container } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 

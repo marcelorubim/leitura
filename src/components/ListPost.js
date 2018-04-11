@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Post from './Post'
 import { connect } from 'react-redux'
-import { withRouter,Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { selectCategory } from '../actions'
 import sortBy from 'sort-by';
-import { Form, Container,Segment,Button } from 'semantic-ui-react';
+import { Form, Container,Segment } from 'semantic-ui-react';
 
 
 
@@ -19,14 +19,18 @@ class ListPost extends Component {
     }
     componentDidUpdate(prevProps) {
         const { changeCategory, activeCategory } = this.props;
-        if (activeCategory !== prevProps.activeCategory) {
+        // if (activeCategory !== prevProps.activeCategory || activeCategory===null){
             changeCategory(activeCategory);
-        }
+        // }
+    }
+    componentDidMount(){
+        const { changeCategory, activeCategory } = this.props;
+        changeCategory(activeCategory);
     }
     render() {
         const { posts, activeCategory } = this.props
-        const postsCategory = posts.sort(sortBy(orderBy)).filter(p => !p.deleted).filter(p => !activeCategory || p.category === activeCategory);
         const { orderBy } = this.state
+        const postsCategory = posts.sort(sortBy(orderBy)).filter(p => !p.deleted).filter(p => !activeCategory || p.category === activeCategory);
         const orderOptions = [
             { key: 'v', text: 'Score', value: 'voteScore' },
             { key: 't', text: 'Date', value: 'timestamp' },
@@ -42,10 +46,6 @@ class ListPost extends Component {
                 </Container>
                 {postsCategory.map(p =>
                     <Segment.Group key={p.id}>
-                        <Segment>
-                         &nbsp;   
-                        <Link to={`/postDetail/${p.id}`}><Button floated='right' size='mini' basic color='blue'>Detail</Button></Link>
-                        </Segment>
                         <Segment>
                             <Post post={p} />
                         </Segment>
