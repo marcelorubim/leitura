@@ -19,14 +19,15 @@ class ListPost extends Component {
     }
     componentDidUpdate(prevProps) {
         const { changeCategory, activeCategory } = this.props;
-        // if (activeCategory !== prevProps.activeCategory || activeCategory===null){
+        if (activeCategory !== prevProps.activeCategory || activeCategory===null){
             changeCategory(activeCategory);
-        // }
+        }
     }
-    componentDidMount(){
-        const { changeCategory, activeCategory } = this.props;
+    componentDidMount() {
+        const { activeCategory, changeCategory } = this.props;
         changeCategory(activeCategory);
-    }
+    
+      }
     render() {
         const { posts, activeCategory } = this.props
         const { orderBy } = this.state
@@ -57,7 +58,7 @@ class ListPost extends Component {
 }
 function mapStateToProps({ posts }, { match }) {
     return {
-        posts: posts,
+        posts: Object.keys(posts).map((key) => posts[key]),
         activeCategory: match.params.activeCategory
     }
 }

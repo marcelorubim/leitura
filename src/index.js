@@ -7,9 +7,6 @@ import reducer from './reducers'
 import thunk from 'redux-thunk';
 import logger from 'redux-logger'
 import { BrowserRouter } from 'react-router-dom'
-import createBrowserHistory from 'history/createBrowserHistory'
-
-const history = createBrowserHistory()
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -22,6 +19,6 @@ const store = createStore(
 
 
 
-ReactDOM.render(<Provider store={store}><BrowserRouter history={history}>
+ReactDOM.render(<Provider store={store}><BrowserRouter>
   <App/>
 </BrowserRouter></Provider>, document.getElementById('root'));

@@ -1,24 +1,26 @@
-import {fetchCategoriesAPI,fetchAllPostsAPI,fetchPostDetailAPI,fetchCommentsAPI} from '../api'
+import {fetchCategoriesAPI,fetchAllPostsAPI,fetchPostDetailAPI,fetchCommentsAPI,addComment,registerVotePost} from '../api'
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const SELECT_CATEGORY = 'SELECT_CATEGORY';
-export const FETCH_POST_DETAIL = 'FETCH_POST_DETAIL';
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
-
+export const UPDATE_COMMENT = 'UPDATE_COMMENT';
 
 
 function receiveComments(comments){
     return {
         type: RECEIVE_COMMENTS,
-        comments
+        payload:comments.reduce((acc,val) => ({
+            ...acc,
+            [val.id]:{...val}
+        }),{})
     };
 }
 
-function receivePostDetail(postSelected){
+function receiveSingleComment(comment){
     return {
-        type: FETCH_POST_DETAIL,
-        postSelected
+        type: RECEIVE_COMMENTS,
+        payload:{[comment.id]:{...comment}}
     };
 }
 
@@ -36,17 +38,30 @@ export function selectCategory(activeCategory){
     };
 }
 
+function receiveSinglePost(post){
+    return {
+        type: RECEIVE_POSTS,
+        payload:{[post.id]:{...post}}
+    };
+}
+
+  function receivePosts(posts){
+    return {
+        type: RECEIVE_POSTS,
+        payload: posts.reduce((acc,p) => (
+            {
+                ...acc,
+                [p.id]:{...p}
+            }
+        ),{})
+    };
+}
+
 export const fetchCategories = () => dispatch => (
     fetchCategoriesAPI().then((response) => response.json())
     .then((responseJson) => (dispatch(receiveCategories(responseJson.categories))
   )))
 
-  function receivePosts(posts){
-    return {
-        type: RECEIVE_POSTS,
-        posts
-    };
-}
 
 export const fetchPosts = () => dispatch => (
     fetchAllPostsAPI().then((response) => response.json())
@@ -55,10 +70,20 @@ export const fetchPosts = () => dispatch => (
 
   export const fetchPostDetail = (postId) => dispatch => (
     fetchPostDetailAPI(postId).then((response) => response.json())
-    .then((responseJson) => (dispatch(receivePostDetail(responseJson))
+    .then((responseJson) => (dispatch(receiveSinglePost(responseJson))
   )))
 
   export const fetchComments = (postId) => dispatch => (
     fetchCommentsAPI(postId).then((response) => response.json())
     .then((responseJson) => (dispatch(receiveComments(responseJson))
+  )))
+
+  export const insertComment = (comment) => dispatch => (
+    addComment(comment).then((response) => response.json())
+    .then((responseJson) => (dispatch(receiveSingleComment(responseJson))
+  )))
+
+  export const sendVotePost = (postId,option)  => dispatch => (
+    registerVotePost(postId,option).then((response) => response.json())
+    .then((responseJson) => (dispatch(receiveSinglePost(responseJson))
   )))

@@ -21,7 +21,7 @@ class App extends Component {
     const { receiveCategories, receivePosts, activeCategory, changeCategory } = this.props;
     receiveCategories();
     receivePosts();
-    changeCategory(activeCategory);
+    // changeCategory(activeCategory);
 
   }
   render() {

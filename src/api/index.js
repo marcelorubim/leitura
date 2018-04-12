@@ -23,3 +23,12 @@ export function addComment(comment) {
     })
 }
 
+export function registerVotePost(postId,vote){
+    return fetch(`/posts/${postId}`, 
+    { 
+        method: 'POST', 
+        ...header, 
+        body: JSON.stringify(vote) 
+    })
+}
+

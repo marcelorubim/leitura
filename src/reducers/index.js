@@ -1,11 +1,10 @@
-import { RECEIVE_CATEGORIES,RECEIVE_POSTS,SELECT_CATEGORY,FETCH_POST_DETAIL,RECEIVE_COMMENTS } from '../actions'
+import { RECEIVE_CATEGORIES,RECEIVE_POSTS,SELECT_CATEGORY,RECEIVE_COMMENTS } from '../actions'
 
 const initialState = {
     activeCategory: null,
     categories: [],
-    posts: [],
-    comments: [],
-    postSelected: {}
+    posts: {},
+    comments: {},
 }
 
 const root = (state=initialState,action) => {
@@ -18,22 +17,20 @@ const root = (state=initialState,action) => {
         case RECEIVE_POSTS:
             return {
                 ...state,
-                posts:action.posts
+                posts:{
+                    ...state.posts,
+                    ...action.payload
+                }
             }
         case SELECT_CATEGORY:
             return {
                 ...state,
                 activeCategory:action.activeCategory
             }
-        case FETCH_POST_DETAIL:
-            return {
-                ...state,
-                postSelected:action.postSelected
-            }
         case RECEIVE_COMMENTS:
             return{
                 ...state,
-                comments:action.comments   
+                comments:{...state.comments,...action.payload}   
             }
         default:
             return state

@@ -28,10 +28,9 @@ const Header = ({ activeCategory, categories,orderBy }) => {
             </Container>
         </Menu>)
 }
-function mapStateToProps({ categories, posts, activeCategory}) {
+function mapStateToProps({ categories, activeCategory}) {
     return {
         categories,
-        posts,
         activeCategory
     }
 }
