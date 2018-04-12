@@ -18,11 +18,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { receiveCategories, receivePosts, activeCategory, changeCategory } = this.props;
+    const { receiveCategories, receivePosts} = this.props;
     receiveCategories();
     receivePosts();
-    // changeCategory(activeCategory);
-
   }
   render() {
     return (

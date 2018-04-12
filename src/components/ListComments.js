@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Comment, Segment, Button, Icon, Divider, Form,Label } from 'semantic-ui-react';
+import {  Comment, Segment, Button, Form,Label} from 'semantic-ui-react';
 import uuid from 'uuid'
-import { fetchComments, insertComment } from '../actions'
+import { fetchComments, insertComment,sendCommentVote,deleteComment } from '../actions'
 import { withRouter } from 'react-router-dom'
 
 
@@ -10,7 +10,7 @@ class ListComments extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         console.log(e);
-        const { postId, receiveComments, addComment } = this.props
+        const { postId, addComment } = this.props
         const form = e.target;
         const data = new FormData(form);
         const newComment = {
@@ -23,7 +23,14 @@ class ListComments extends Component {
         console.log(newComment)
         addComment(newComment)
         e.target.reset();
-
+    }
+    sendVote = (e, commentId,option) => {
+        const { registerCommentVote } = this.props
+        registerCommentVote(commentId, { option })
+    }
+    deleteComment = (e, commentId) => {
+        const { deleteComment } = this.props
+        deleteComment(commentId)
     }
     render() {
         const { comments } = this.props
@@ -42,9 +49,9 @@ class ListComments extends Component {
                                     </Comment.Metadata>
                                     <Comment.Text>{c.body}</Comment.Text>
                                     <Comment.Actions>
-                                        <Comment.Action>Like</Comment.Action>
-                                        <Comment.Action>Dislike</Comment.Action>
-                                        <Comment.Action>Delete</Comment.Action>
+                                        <Comment.Action onClick={(e) => this.sendVote(e,c.id, 'upVote')}>Like</Comment.Action>
+                                        <Comment.Action onClick={(e) => this.sendVote(e,c.id, 'downVote')}>Dislike</Comment.Action>
+                                        <Comment.Action onClick={(e) => this.deleteComment(e,c.id)}>Delete</Comment.Action>
 
                                     </Comment.Actions>
                                 </Comment.Content>
@@ -62,7 +69,7 @@ class ListComments extends Component {
         )
     }
 }
-function mapStateToProps({ comments }, { match }) {
+function mapStateToProps({ comments,posts }, { match }) {
     return {
         comments: Object.keys(comments).map((key) => comments[key]).filter((c) => c.parentId === match.params.postId && !c.deleted),
         postId: match.params.postId,
@@ -71,8 +78,9 @@ function mapStateToProps({ comments }, { match }) {
 function mapDispatchToProps(dispatch) {
     return {
         receiveComments: (postId) => dispatch(fetchComments(postId)),
-        addComment: (comment) => dispatch(insertComment(comment))
-
+        addComment: (comment) => dispatch(insertComment(comment)),
+        registerCommentVote: (commentId,option) => dispatch(sendCommentVote(commentId,option)),
+        deleteComment: (commentId) => dispatch(deleteComment(commentId)),
     }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ListComments))

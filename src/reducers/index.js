@@ -1,4 +1,4 @@
-import { RECEIVE_CATEGORIES,RECEIVE_POSTS,SELECT_CATEGORY,RECEIVE_COMMENTS } from '../actions'
+import { RECEIVE_CATEGORIES,RECEIVE_POSTS,SELECT_CATEGORY,RECEIVE_COMMENTS,UPDATE_POST } from '../actions'
 
 const initialState = {
     activeCategory: null,
@@ -9,6 +9,17 @@ const initialState = {
 
 const root = (state=initialState,action) => {
     switch(action.type){
+        case UPDATE_POST: 
+            return {
+                ...state,
+                posts:{
+                    ...state.posts,
+                    [{...action.payload}.id]:{
+                        ...state.posts[{...action.payload}.id],
+                        ...action.payload
+                    }
+                }
+            }
         case RECEIVE_CATEGORIES: 
             return {
                 ...state,
@@ -30,7 +41,10 @@ const root = (state=initialState,action) => {
         case RECEIVE_COMMENTS:
             return{
                 ...state,
-                comments:{...state.comments,...action.payload}   
+                comments:{
+                    ...state.comments,
+                    ...action.payload
+                }   
             }
         default:
             return state

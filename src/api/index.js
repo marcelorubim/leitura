@@ -32,3 +32,19 @@ export function registerVotePost(postId,vote){
     })
 }
 
+export function registerVoteComment(commentId,vote){
+    return fetch(`/comments/${commentId}`, 
+    { 
+        method: 'POST', 
+        ...header, 
+        body: JSON.stringify(vote) 
+    })
+}
+export function deleteCommentAPI(commentId){
+    return fetch(`/comments/${commentId}`, 
+    { 
+        method: 'DELETE', 
+        ...header
+    })
+}
+
