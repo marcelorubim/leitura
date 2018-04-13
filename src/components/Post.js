@@ -1,11 +1,34 @@
-import React from 'react';
-import { Segment, Label} from 'semantic-ui-react';
+import React,{Component} from 'react';
+import { Segment, Label,Button,Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
+import { sendVotePost } from '../actions'
+import { connect } from 'react-redux';
 
-const Post = ({ post }) => {
-  return (
-    <div>
-      <Link to={`/postDetail/${post.id}`}><h2>{post.title}</h2></Link>      
+class Post extends Component {
+  sendVote = (e,postId,option) => {   
+    e.preventDefault(); 
+    const { registerVotePost } = this.props
+    registerVotePost(postId, { option })
+  }
+  render() {
+    const { post } = this.props
+    return (
+  <div>
+      <Button.Group floated='right'>
+        <Button primary icon onClick={(e) => this.sendVote(e,post.id, 'upVote')} >
+          <Icon name='thumbs up'  />
+        </Button>
+        <Button primary icon onClick={(e) => this.sendVote(e,post.id, 'downVote')}>
+          <Icon name='thumbs down'  />
+        </Button>
+        <Button primary icon>
+          <Icon name='edit' />
+        </Button>
+        <Button primary icon>
+          <Icon name='trash' />
+        </Button>
+      </Button.Group>
+      <Link to={`/${post.category}/${post.id}`}><h2>{post.title}</h2></Link>
       <Segment.Group key={post.id}>
         <Segment>{post.body}</Segment>
         <Segment.Group horizontal>
@@ -28,6 +51,20 @@ const Post = ({ post }) => {
         </Segment.Group>
       </Segment.Group>
     </div>
-  )
+    )
+  }
 }
-export default Post
+function mapStateToProps(state, { post }) {
+  return {
+      post
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    registerVotePost: (postId, option) => dispatch(sendVotePost(postId, option))
+  }
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Post)

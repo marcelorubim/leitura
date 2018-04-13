@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Post from './Post'
 import { Container, Button, Icon, Divider } from 'semantic-ui-react';
 import { fetchPostDetail, selectCategory, fetchComments, sendVotePost } from '../actions'
-import { withRouter } from 'react-router-dom'
+import { withRouter,Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 import ListComments from './ListComments';
 
@@ -14,36 +14,26 @@ class PostDetail extends Component {
         registerVotePost(postId, { option })
     }
     componentDidMount() {
-        const { postId, receivePostDetail, changeCategory, receiveComments } = this.props
-        receivePostDetail(postId);
-        receiveComments(postId);
+        const { postId, receivePostDetail, changeCategory, receiveComments,post } = this.props
+        if(typeof post !== "undefined"){
+            receivePostDetail(postId);
+            receiveComments(postId);
+        }
+        
         changeCategory(null);
     }
     render() {
-        const { comments, history } = this.props
-        const post = this.props.post || {}
-        console.log(comments)
+        const { comments, history,post } = this.props
+        if(typeof post === "undefined"){
+            return <Redirect to='/'/>;
+        }        
         return (
 
             <Container>
-
-
                 <Post post={post} />
                 <Divider />
-
                 <Container>
-                    <Button primary onClick={(e) => history.goBack()}><Icon name='left arrow' />Back</Button>
-                    <Button.Group floated='right'>
-                        <Button primary icon >
-                            <Icon name='thumbs up' onClick={(e) => this.sendVote(e, 'upVote')} />
-                        </Button>
-                        <Button primary icon>
-                            <Icon name='thumbs down' onClick={(e) => this.sendVote(e, 'downVote')} />
-                        </Button>
-                        <Button primary icon>
-                            <Icon name='trash' />
-                        </Button>
-                    </Button.Group>
+                    <Button primary onClick={(e) => history.goBack()}><Icon name='left arrow' />Back</Button>                    
                 </Container>
                 <ListComments />
             </Container >

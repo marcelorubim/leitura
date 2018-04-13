@@ -2,27 +2,41 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {  Comment, Segment, Button, Form,Label} from 'semantic-ui-react';
 import uuid from 'uuid'
-import { fetchComments, insertComment,sendCommentVote,deleteComment } from '../actions'
+import { fetchComments, insertComment,sendCommentVote,deleteComment,updateComment } from '../actions'
 import { withRouter } from 'react-router-dom'
 
 
 class ListComments extends Component {
+    state = {
+        comment: {
+            author:'',
+            body:''
+        }
+    }
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e);
-        const { postId, addComment } = this.props
-        const form = e.target;
-        const data = new FormData(form);
-        const newComment = {
-            id: uuid.v1(),
-            author: data.get('author'),
-            body: data.get('body'),
-            timestamp: new Date().getTime(),
-            parentId: postId
-        }
-        console.log(newComment)
-        addComment(newComment)
         e.target.reset();
+        const { postId, addComment,updateComment } = this.props
+        const { comment } = this.state
+        const isNewComment = typeof comment.id === "undefined"
+        comment.id = comment.id || uuid.v1()
+        comment.timestamp = new Date().getTime();
+        comment.parentId = postId;
+        if(isNewComment){
+            addComment(comment)
+        }else{
+            updateComment(comment)
+        }        
+        this.setState(
+            {
+                comment:{
+                    author:'',
+                    body:''
+                }
+            });
+        console.log(this.state.comment);
+
+
     }
     sendVote = (e, commentId,option) => {
         const { registerCommentVote } = this.props
@@ -32,8 +46,20 @@ class ListComments extends Component {
         const { deleteComment } = this.props
         deleteComment(commentId)
     }
+    handleChange(field,value) {          
+        console.log(value)
+        this.setState((prevState) => (
+            {
+                comment: {
+                    ...prevState.comment,
+                    [field]:value
+                }
+            }
+        ));
+    }
     render() {
-        const { comments } = this.props
+        const { comments } = this.props;
+        const { comment } = this.state
         return (
             <div style={{ marginTop: '3rem' }}>
                 <h4>Comments</h4>
@@ -52,7 +78,7 @@ class ListComments extends Component {
                                         <Comment.Action onClick={(e) => this.sendVote(e,c.id, 'upVote')}>Like</Comment.Action>
                                         <Comment.Action onClick={(e) => this.sendVote(e,c.id, 'downVote')}>Dislike</Comment.Action>
                                         <Comment.Action onClick={(e) => this.deleteComment(e,c.id)}>Delete</Comment.Action>
-
+                                        <Comment.Action onClick={(e) => this.setState({comment:c})}>Edit</Comment.Action>
                                     </Comment.Actions>
                                 </Comment.Content>
                             </Comment>
@@ -60,9 +86,9 @@ class ListComments extends Component {
                         }
                     </Comment.Group>
                     <Form reply onSubmit={this.handleSubmit}>
-                        <Form.Input label='Your Name' placeholder='Your Name' name='author' />
-                        <Form.TextArea label='Comment' placeholder='Comment' name='body' />
-                        <Button content='Add Reply' labelPosition='left' icon='edit' primary />
+                        <Form.Input label='Your Name' placeholder='Your Name' name='author' value={comment.author} onChange={(e) => this.handleChange('author',e.target.value)}/>
+                        <Form.TextArea label='Comment' placeholder='Comment' name='body'  value={comment.body} onChange={(e) => this.handleChange('body',e.target.value)}/>
+                        <Button content='Save' labelPosition='left' icon='edit' primary />
                     </Form>
                 </Segment>
             </div>
@@ -81,6 +107,7 @@ function mapDispatchToProps(dispatch) {
         addComment: (comment) => dispatch(insertComment(comment)),
         registerCommentVote: (commentId,option) => dispatch(sendCommentVote(commentId,option)),
         deleteComment: (commentId) => dispatch(deleteComment(commentId)),
+        updateComment: (comment) => dispatch(updateComment(comment)),
     }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ListComments))

@@ -27,7 +27,7 @@ class App extends Component {
       <div>
         <Header />
         <Switch>
-          <Route exact path='/postDetail/:postId?'>
+          <Route path='/:activeCategory/:postId'>
             <PostDetail />
           </Route>
           <Route path="/:activeCategory?" component={ListPost}>

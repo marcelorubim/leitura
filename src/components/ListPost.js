@@ -48,8 +48,8 @@ class ListPost extends Component {
                 {postsCategory.map(p =>
                     <Segment.Group key={p.id}>
                         <Segment>
-                            <Post post={p} />
-                        </Segment>
+                            <Post key={p.id} post={p}/>
+                        </Segment>                        
                     </Segment.Group>
                 )}
             </Container>

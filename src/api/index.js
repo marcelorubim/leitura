@@ -22,6 +22,14 @@ export function addComment(comment) {
         body: JSON.stringify(comment) 
     })
 }
+export function updateCommentAPI(comment) {
+    return fetch(`/comments/${comment.id}`, 
+    { 
+        method: 'PUT', 
+        ...header, 
+        body: JSON.stringify(comment) 
+    })
+}
 
 export function registerVotePost(postId,vote){
     return fetch(`/posts/${postId}`, 
