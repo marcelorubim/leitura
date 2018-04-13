@@ -23,7 +23,7 @@ class PostDetail extends Component {
         changeCategory(null);
     }
     render() {
-        const { comments, history,post } = this.props
+        const { history,post } = this.props
         if(typeof post === "undefined"){
             return <Redirect to='/'/>;
         }        

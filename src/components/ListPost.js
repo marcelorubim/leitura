@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Post from './Post'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { selectCategory } from '../actions'
+import { selectCategory,fetchPosts } from '../actions'
 import sortBy from 'sort-by';
 import { Form, Container,Segment } from 'semantic-ui-react';
 
@@ -24,9 +24,9 @@ class ListPost extends Component {
         }
     }
     componentDidMount() {
-        const { activeCategory, changeCategory } = this.props;
+        const { activeCategory, changeCategory,receivePosts } = this.props;
         changeCategory(activeCategory);
-    
+        receivePosts();
       }
     render() {
         const { posts, activeCategory } = this.props
@@ -64,7 +64,9 @@ function mapStateToProps({ posts }, { match }) {
 }
 function mapDispatchToProps(dispatch) {
     return {
-        changeCategory: (c) => dispatch(selectCategory(c))
+        changeCategory: (c) => dispatch(selectCategory(c)),
+        receivePosts: () => dispatch(fetchPosts()),
+
     }
 }
 export default withRouter(connect(

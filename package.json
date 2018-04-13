@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "concurrently": "^3.5.1",
     "history": "^4.7.2",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
@@ -17,10 +18,11 @@
     "uuid": "^3.2.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently 'npm run server' 'react-scripts start'",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "cd api-server && npm start"
   },
   "proxy": "http://localhost:3001"
 }

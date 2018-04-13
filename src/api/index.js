@@ -30,7 +30,14 @@ export function updateCommentAPI(comment) {
         body: JSON.stringify(comment) 
     })
 }
-
+export function insertPostAPI(post) {
+    return fetch(`/posts`, 
+    { 
+        method: 'POST', 
+        ...header, 
+        body: JSON.stringify(post) 
+    })
+}
 export function registerVotePost(postId,vote){
     return fetch(`/posts/${postId}`, 
     { 

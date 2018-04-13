@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Header from './Header';
 import ListPost from './ListPost';
 import PostDetail from './PostDetail';
-import { fetchCategories, fetchPosts, selectCategory } from '../actions'
+import { fetchCategories, selectCategory } from '../actions'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 
@@ -18,9 +18,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { receiveCategories, receivePosts} = this.props;
+    const { receiveCategories} = this.props;
     receiveCategories();
-    receivePosts();
   }
   render() {
     return (
@@ -41,13 +40,11 @@ class App extends Component {
 function mapStateToProps({ categories, posts, activeCategory }) {
   return {
     categories,
-    posts,
   }
 }
 function mapDispatchToProps(dispatch) {
   return {
     receiveCategories: () => dispatch(fetchCategories()),
-    receivePosts: () => dispatch(fetchPosts()),
     changeCategory: (c) => dispatch(selectCategory(c))
 
   }

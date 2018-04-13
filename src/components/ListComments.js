@@ -5,14 +5,15 @@ import uuid from 'uuid'
 import { fetchComments, insertComment,sendCommentVote,deleteComment,updateComment } from '../actions'
 import { withRouter } from 'react-router-dom'
 
+const initialState = {
+    comment:{
+        author:'',
+        body:''
+    }
+}
 
 class ListComments extends Component {
-    state = {
-        comment: {
-            author:'',
-            body:''
-        }
-    }
+    state = initialState
     handleSubmit = (e) => {
         e.preventDefault();
         e.target.reset();
@@ -27,16 +28,7 @@ class ListComments extends Component {
         }else{
             updateComment(comment)
         }        
-        this.setState(
-            {
-                comment:{
-                    author:'',
-                    body:''
-                }
-            });
-        console.log(this.state.comment);
-
-
+        this.setState(initialState);
     }
     sendVote = (e, commentId,option) => {
         const { registerCommentVote } = this.props
@@ -46,8 +38,7 @@ class ListComments extends Component {
         const { deleteComment } = this.props
         deleteComment(commentId)
     }
-    handleChange(field,value) {          
-        console.log(value)
+    handleChange(field,value) {   
         this.setState((prevState) => (
             {
                 comment: {
@@ -86,7 +77,7 @@ class ListComments extends Component {
                         }
                     </Comment.Group>
                     <Form reply onSubmit={this.handleSubmit}>
-                        <Form.Input label='Your Name' placeholder='Your Name' name='author' value={comment.author} onChange={(e) => this.handleChange('author',e.target.value)}/>
+                        <Form.Input label='Author' placeholder='Author' name='author' value={comment.author} onChange={(e) => this.handleChange('author',e.target.value)}/>
                         <Form.TextArea label='Comment' placeholder='Comment' name='body'  value={comment.body} onChange={(e) => this.handleChange('body',e.target.value)}/>
                         <Button content='Save' labelPosition='left' icon='edit' primary />
                     </Form>
