@@ -1,10 +1,13 @@
-import { RECEIVE_CATEGORIES,RECEIVE_POSTS,SELECT_CATEGORY,RECEIVE_COMMENTS,UPDATE_POST } from '../actions'
+import { RECEIVE_CATEGORIES,RECEIVE_POSTS,SELECT_CATEGORY,RECEIVE_COMMENTS,UPDATE_POST,TOGGLE_POST_MODAL } from '../actions'
 
 const initialState = {
     activeCategory: null,
     categories: [],
     posts: {},
+    selectedPostId: null,
     comments: {},
+    showModal: false,
+    pendingActions: 0
 }
 
 const root = (state=initialState,action) => {
@@ -45,6 +48,12 @@ const root = (state=initialState,action) => {
                     ...state.comments,
                     ...action.payload
                 }   
+            }
+        case TOGGLE_POST_MODAL:
+            return {
+                ...state,
+                showModal:!state.showModal,
+                selectedPostId:action.payload                
             }
         default:
             return state

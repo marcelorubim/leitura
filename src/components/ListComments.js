@@ -77,8 +77,8 @@ class ListComments extends Component {
                         }
                     </Comment.Group>
                     <Form reply onSubmit={this.handleSubmit}>
-                        <Form.Input label='Author' placeholder='Author' name='author' value={comment.author} onChange={(e) => this.handleChange('author',e.target.value)}/>
-                        <Form.TextArea label='Comment' placeholder='Comment' name='body'  value={comment.body} onChange={(e) => this.handleChange('body',e.target.value)}/>
+                        <Form.Input required label='Author' placeholder='Author' name='author' value={comment.author} onChange={(e) => this.handleChange('author',e.target.value)}/>
+                        <Form.TextArea required label='Comment' placeholder='Comment' name='body'  value={comment.body} onChange={(e) => this.handleChange('body',e.target.value)}/>
                         <Button content='Save' labelPosition='left' icon='edit' primary />
                     </Form>
                 </Segment>

@@ -14,10 +14,10 @@ class PostDetail extends Component {
         registerVotePost(postId, { option })
     }
     componentDidMount() {
-        const { postId, receivePostDetail, changeCategory, receiveComments,post } = this.props
+        const { postId,receivePostDetail,changeCategory,receiveComments,post } = this.props
         if(typeof post !== "undefined"){
-            receivePostDetail(postId);
-            receiveComments(postId);
+            receivePostDetail(postId)
+            receiveComments(postId)
         }
         
         changeCategory(null);

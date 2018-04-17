@@ -38,6 +38,14 @@ export function insertPostAPI(post) {
         body: JSON.stringify(post) 
     })
 }
+export function updatePostAPI(postId,post) {
+    return fetch(`/posts/${postId}`, 
+    { 
+        method: 'PUT', 
+        ...header, 
+        body: JSON.stringify(post) 
+    })
+}
 export function registerVotePost(postId,vote){
     return fetch(`/posts/${postId}`, 
     { 

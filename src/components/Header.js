@@ -1,15 +1,17 @@
-import React, { Component } from 'react';
-import { Menu, Button, Container } from 'semantic-ui-react';
+import React, { Component } from 'react'
+import { Menu, Button, Container } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import ModalPost from './ModalPost';
+import ModalPost from './ModalPost'
+import { togglePostModal } from '../actions'
+
 
 class Header extends Component {
     state = {
         isModalOpened: false
     }
     render() {
-        const { activeCategory, categories } = this.props;
+        const { activeCategory, categories, togglePostModal } = this.props;
         return (
             <Menu inverted>
                 <Container>
@@ -23,13 +25,13 @@ class Header extends Component {
                     )}
                     <Menu.Menu position='right'>
                         <Menu.Item>
-                            <Button size='mini' primary onClick={(e) => this.setState({ isModalOpened: true })}> New Post</Button>
+                            <Button size='mini' primary onClick={(e) => togglePostModal()}> New Post</Button>
                         </Menu.Item>
                         <Menu.Item>
                         </Menu.Item>
                     </Menu.Menu>
                 </Container>
-                <ModalPost open={this.state.isModalOpened} close={() => this.setState({ isModalOpened: false })} />
+                <ModalPost close={() => this.setState({ isModalOpened: false })} />
             </Menu>
         )
     }
@@ -40,6 +42,12 @@ function mapStateToProps({ categories, activeCategory }) {
         activeCategory
     }
 }
+function mapDispatchToProps(dispatch) {
+    return {
+        togglePostModal: () => dispatch(togglePostModal())
+    }
+}
 export default connect(
     mapStateToProps,
+    mapDispatchToProps
 )(Header)

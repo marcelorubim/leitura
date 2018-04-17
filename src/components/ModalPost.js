@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, Form,Select } from 'semantic-ui-react'
-import { insertPost } from '../actions'
+import { insertPost, updatePost, togglePostModal } from '../actions'
 import uuid from 'uuid'
+
 
 const initialState = {
     post: {
@@ -13,19 +14,26 @@ const initialState = {
     }
 }
 class ModalPost extends Component {
-    state = initialState;
+    state = initialState
     handleSubmit = (e) => {
-        e.preventDefault();
-        const { insertPost, close } = this.props
+        e.preventDefault()
+        const { insertPost, togglePostModal, updatePost } = this.props
         const { post } = this.state
         console.log(post)
         const isNewPost = typeof post.id === "undefined"
-        post.id = post.id || uuid.v1()
-        post.timestamp = new Date().getTime();
-        insertPost(post);
+        if(isNewPost){
+            post.id = post.id || uuid.v1()
+            post.timestamp = new Date().getTime()
+            insertPost(post)
+        }else{
+            updatePost(post.id,{
+                title:post.title,
+                body:post.body
+            })
+        }        
         e.target.reset();
         this.setState(initialState);
-        close();
+        togglePostModal();
     }
     handleChange(field, value) {
         this.setState((prevState) => (
@@ -37,22 +45,31 @@ class ModalPost extends Component {
             }
         ));
     }
+    componentDidUpdate(){
+        if(this.state.post.id !== this.props.post.id){
+            this.setState({
+                post:{
+                    ...this.props.post
+                }
+            });
+        }
+    }
     render() {
-        const { open, close, categories } = this.props
+        const { open, categories, togglePostModal } = this.props
         const { post } = this.state
         return (
 
-            <Modal open={open} onClose={close} closeIcon>
+            <Modal open={open} onClose={togglePostModal} closeIcon>
                 <Modal.Header>
                     Post
                 </Modal.Header>
                 <Modal.Content>
                     <Form reply onSubmit={this.handleSubmit}>
-                        <Form.Input label='Author' placeholder='Author' name='author' value={post.author} onChange={(e) => this.handleChange('author', e.target.value)} />
-                        <Form.Input label='Title' placeholder='Title' name='title' value={post.title} onChange={(e) => this.handleChange('title', e.target.value)} />
-                        <Form.Field control={Select} label='Categories' options={categories} placeholder='Categories' value={post.category}  onChange={(e,{value}) => this.handleChange('category', value)} />
-                        <Form.TextArea label='Text' placeholder='Text' name='body' value={post.body} onChange={(e) => this.handleChange('body', e.target.value)} />
-                        <Button negative>
+                        <Form.Input required label='Author' placeholder='Author' name='author' value={post.author} onChange={(e) => this.handleChange('author', e.target.value)} />
+                        <Form.Input required label='Title' placeholder='Title' name='title' value={post.title} onChange={(e) => this.handleChange('title', e.target.value)} />
+                        <Form.Field required control={Select} label='Categories' options={categories} placeholder='Categories' value={post.category}  onChange={(e,{value}) => this.handleChange('category', value)} />
+                        <Form.TextArea required label='Text' placeholder='Text' name='body' value={post.body} onChange={(e) => this.handleChange('body', e.target.value)} />
+                        <Button negative onClick={(e) => {e.preventDefault(); togglePostModal()}}>
                             Cancel
                         </Button>
                         <Button primary>
@@ -70,15 +87,18 @@ class ModalPost extends Component {
         )
     }
 }
-function mapStateToProps({ categories }, { open }) {
+function mapStateToProps({ categories,showModal,selectedPostId,posts }) {
     return {
-        open,
-        categories:categories.map(c => ({ key: c.name, text: c.name, value: c.name }))
+        open:showModal,
+        categories:categories.map(c => ({ key: c.name, text: c.name, value: c.name })),
+        post: posts[selectedPostId] || {}
     }
 }
 function mapDispatchToProps(dispatch) {
     return {
-        insertPost: (post) => dispatch(insertPost(post))
+        insertPost: (post) => dispatch(insertPost(post)),
+        updatePost: (postId,post) => dispatch(updatePost(postId,post)),
+        togglePostModal: () => dispatch(togglePostModal())
     }
 }
 export default connect(

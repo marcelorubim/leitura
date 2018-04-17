@@ -1,4 +1,4 @@
-import { fetchCategoriesAPI, fetchAllPostsAPI, fetchPostDetailAPI, fetchCommentsAPI, addComment, registerVotePost, registerVoteComment, deleteCommentAPI, updateCommentAPI, insertPostAPI } from '../api'
+import { fetchCategoriesAPI, fetchAllPostsAPI, fetchPostDetailAPI, fetchCommentsAPI, addComment, registerVotePost, registerVoteComment, deleteCommentAPI, updateCommentAPI, insertPostAPI, updatePostAPI } from '../api'
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
@@ -6,7 +6,14 @@ export const SELECT_CATEGORY = 'SELECT_CATEGORY';
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 export const UPDATE_COMMENT = 'UPDATE_COMMENT';
 export const UPDATE_POST = 'UPDATE_POST';
+export const TOGGLE_POST_MODAL = 'TOGGLE_POST_MODAL';
 
+export function togglePostModal(postId) {
+    return {
+        type: TOGGLE_POST_MODAL,
+        payload: postId
+    };
+}
 
 function receiveComments(comments) {
     return {
@@ -39,12 +46,6 @@ export function selectCategory(activeCategory) {
     };
 }
 
-export function updatePost(post) {
-    return {
-        type: UPDATE_POST,
-        payload: { [post.id]: { ...post } }
-    };
-}
 export function receiveSinglePost(post) {
     return {
         type: RECEIVE_POSTS,
@@ -110,3 +111,6 @@ export const insertPost = (post) => dispatch => (
         .then((responseJson) => {
             dispatch(receiveSinglePost(responseJson))
         }))
+export const updatePost = (postId,post) => dispatch => (
+    updatePostAPI(postId,post).then((response) => response.json())
+    .then((responseJson) => (dispatch(receiveSinglePost(responseJson)))))

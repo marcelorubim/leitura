@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import Post from './Post'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { selectCategory,fetchPosts } from '../actions'
+import { selectCategory, fetchPosts } from '../actions'
 import sortBy from 'sort-by';
-import { Form, Container,Segment } from 'semantic-ui-react';
+import { Form, Container,Segment } from 'semantic-ui-react'
 
 
 
@@ -31,7 +31,7 @@ class ListPost extends Component {
     render() {
         const { posts, activeCategory } = this.props
         const { orderBy } = this.state
-        const postsCategory = posts.sort(sortBy(orderBy)).filter(p => !p.deleted).filter(p => !activeCategory || p.category === activeCategory);
+        const postsCategory = posts.sort(sortBy(`-${orderBy}`)).filter(p => !p.deleted).filter(p => !activeCategory || p.category === activeCategory);
         const orderOptions = [
             { key: 'v', text: 'Score', value: 'voteScore' },
             { key: 't', text: 'Date', value: 'timestamp' },
@@ -66,7 +66,6 @@ function mapDispatchToProps(dispatch) {
     return {
         changeCategory: (c) => dispatch(selectCategory(c)),
         receivePosts: () => dispatch(fetchPosts()),
-
     }
 }
 export default withRouter(connect(

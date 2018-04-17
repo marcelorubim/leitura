@@ -6,6 +6,7 @@ import PostDetail from './PostDetail';
 import { fetchCategories, selectCategory } from '../actions'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
+import { Dimmer, Loader } from 'semantic-ui-react';
 
 
 
@@ -18,14 +19,20 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { receiveCategories} = this.props;
+    const { receiveCategories } = this.props;
     receiveCategories();
   }
   render() {
+    const { showLoading } = this.props;
     return (
       <div>
         <Header />
         <Switch>
+          {showLoading &&
+            <Dimmer active inverted>
+              <Loader size='large' > Loading</Loader>
+            </Dimmer>
+          }
           <Route path='/:activeCategory/:postId'>
             <PostDetail />
           </Route>
@@ -37,16 +44,16 @@ class App extends Component {
     );
   }
 }
-function mapStateToProps({ categories, posts, activeCategory }) {
+function mapStateToProps({ categories, posts, activeCategory, pendingActions }) {
   return {
     categories,
+    showLoading: pendingActions > 0
   }
 }
 function mapDispatchToProps(dispatch) {
   return {
     receiveCategories: () => dispatch(fetchCategories()),
-    changeCategory: (c) => dispatch(selectCategory(c))
-
+    changeCategory: (c) => dispatch(selectCategory(c)),
   }
 }
 export default withRouter(connect(
