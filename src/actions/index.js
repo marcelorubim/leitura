@@ -1,4 +1,4 @@
-import { fetchCategoriesAPI, fetchAllPostsAPI, fetchPostDetailAPI, fetchCommentsAPI, addComment, registerVotePost, registerVoteComment, deleteCommentAPI, updateCommentAPI, insertPostAPI, updatePostAPI } from '../api'
+import { fetchCategoriesAPI, fetchAllPostsAPI, fetchPostDetailAPI, fetchCommentsAPI, addComment, registerVotePost, registerVoteComment, deleteCommentAPI, updateCommentAPI, insertPostAPI, updatePostAPI, deletePostAPI } from '../api'
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
@@ -111,6 +111,11 @@ export const insertPost = (post) => dispatch => (
         .then((responseJson) => {
             dispatch(receiveSinglePost(responseJson))
         }))
-export const updatePost = (postId,post) => dispatch => (
-    updatePostAPI(postId,post).then((response) => response.json())
-    .then((responseJson) => (dispatch(receiveSinglePost(responseJson)))))
+export const updatePost = (postId, post) => dispatch => (
+    updatePostAPI(postId, post).then((response) => response.json())
+        .then((responseJson) => (dispatch(receiveSinglePost(responseJson)))))
+export const deletePost = (postId) => dispatch => (
+    deletePostAPI(postId).then((response) => response.json())
+        .then((responseJson) => {
+            dispatch(receiveSinglePost(responseJson))
+        }))

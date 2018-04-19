@@ -70,4 +70,12 @@ export function deleteCommentAPI(commentId){
         ...header
     })
 }
+export function deletePostAPI(commentId){
+    return fetch(`/posts/${commentId}`, 
+    { 
+        method: 'DELETE', 
+        ...header
+    })
+}
+
 

@@ -1,9 +1,8 @@
 import React,{Component} from 'react';
 import { Segment, Label,Button,Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
-import { sendVotePost } from '../actions'
+import { sendVotePost, deletePost, togglePostModal } from '../actions'
 import { connect } from 'react-redux';
-import { togglePostModal } from '../actions'
 
 class Post extends Component {
   sendVote = (e,postId,option) => {   
@@ -12,7 +11,7 @@ class Post extends Component {
     registerVotePost(postId, { option })
   }
   render() {
-    const { post, togglePostModal } = this.props
+    const { post, togglePostModal, deletePost } = this.props
     return (
   <div>
       <Button.Group floated='right'>
@@ -25,7 +24,7 @@ class Post extends Component {
         <Button primary icon onClick={(e) => togglePostModal(post.id)}>
           <Icon name='edit' />
         </Button>
-        <Button primary icon>
+        <Button primary icon  onClick={(e) => deletePost(post.id)}>
           <Icon name='trash' />
         </Button>
       </Button.Group>
@@ -63,7 +62,8 @@ function mapStateToProps(state, { post }) {
 function mapDispatchToProps(dispatch) {
   return {
     togglePostModal: (postId) => dispatch(togglePostModal(postId)),
-    registerVotePost: (postId, option) => dispatch(sendVotePost(postId, option))
+    registerVotePost: (postId, option) => dispatch(sendVotePost(postId, option)),
+    deletePost: (postId) => dispatch(deletePost(postId))
   }
 }
 export default connect(

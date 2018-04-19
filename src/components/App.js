@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Header from './Header';
 import ListPost from './ListPost';
 import PostDetail from './PostDetail';
+import NotFound from './NotFound'
 import { fetchCategories, selectCategory } from '../actions'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
@@ -33,6 +34,8 @@ class App extends Component {
               <Loader size='large' > Loading</Loader>
             </Dimmer>
           }
+           <Route exact path="/404" component={NotFound} />
+
           <Route path='/:activeCategory/:postId'>
             <PostDetail />
           </Route>

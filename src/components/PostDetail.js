@@ -25,7 +25,7 @@ class PostDetail extends Component {
     render() {
         const { history,post } = this.props
         if(typeof post === "undefined"){
-            return <Redirect to='/'/>;
+            return <Redirect to='/404'/>;
         }        
         return (
 

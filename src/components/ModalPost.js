@@ -57,6 +57,7 @@ class ModalPost extends Component {
     render() {
         const { open, categories, togglePostModal } = this.props
         const { post } = this.state
+        const isNewPost = typeof post.id === "undefined"
         return (
 
             <Modal open={open} onClose={togglePostModal} closeIcon>
@@ -65,9 +66,9 @@ class ModalPost extends Component {
                 </Modal.Header>
                 <Modal.Content>
                     <Form reply onSubmit={this.handleSubmit}>
-                        <Form.Input required label='Author' placeholder='Author' name='author' value={post.author} onChange={(e) => this.handleChange('author', e.target.value)} />
+                        <Form.Input required label='Author' disabled={!isNewPost} placeholder='Author' name='author' value={post.author} onChange={(e) => this.handleChange('author', e.target.value)} />
                         <Form.Input required label='Title' placeholder='Title' name='title' value={post.title} onChange={(e) => this.handleChange('title', e.target.value)} />
-                        <Form.Field required control={Select} label='Categories' options={categories} placeholder='Categories' value={post.category}  onChange={(e,{value}) => this.handleChange('category', value)} />
+                        <Form.Field required control={Select} disabled={!isNewPost} label='Categories' options={categories} placeholder='Categories' value={post.category}  onChange={(e,{value}) => this.handleChange('category', value)} />
                         <Form.TextArea required label='Text' placeholder='Text' name='body' value={post.body} onChange={(e) => this.handleChange('body', e.target.value)} />
                         <Button negative onClick={(e) => {e.preventDefault(); togglePostModal()}}>
                             Cancel
