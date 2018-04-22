@@ -1,30 +1,43 @@
 import React,{Component} from 'react';
 import { Segment, Label,Button,Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom'
-import { sendVotePost, deletePost, togglePostModal } from '../actions'
+import { Link, withRouter } from 'react-router-dom'
+import { sendVotePost } from '../actions'
 import { connect } from 'react-redux';
+import ModalPost from './ModalPost'
 
 class Post extends Component {
+  state = {
+    isModalOpened: false,
+    postClicked: undefined
+  }
   sendVote = (e,postId,option) => {   
     e.preventDefault(); 
     const { registerVotePost } = this.props
     registerVotePost(postId, { option })
   }
+  editPost = (e, postId) => {   
+    e.preventDefault()
+    this.setState({
+      isModalOpened: true,
+      postClicked: postId
+    });
+  }
   render() {
-    const { post, togglePostModal, deletePost } = this.props
+    const { post, deletePost } = this.props   
     return (
   <div>
+      <ModalPost postId={this.state.postClicked} open={this.state.isModalOpened} close={() => this.setState({ isModalOpened: false })} />
       <Button.Group floated='right'>
-        <Button primary icon onClick={(e) => this.sendVote(e,post.id, 'upVote')} >
+        <Button primary icon onClick={(e) => this.sendVote(e, post.id, 'upVote')} >
           <Icon name='thumbs up'  />
         </Button>
-        <Button primary icon onClick={(e) => this.sendVote(e,post.id, 'downVote')}>
+        <Button primary icon onClick={(e) => this.sendVote(e, post.id, 'downVote')}>
           <Icon name='thumbs down'  />
         </Button>
-        <Button primary icon onClick={(e) => togglePostModal(post.id)}>
+        <Button primary icon onClick={(e) => this.editPost(e, post.id)}>
           <Icon name='edit' />
         </Button>
-        <Button primary icon  onClick={(e) => deletePost(post.id)}>
+        <Button primary icon  onClick={(e) => deletePost(e, post.id)}>
           <Icon name='trash' />
         </Button>
       </Button.Group>
@@ -61,12 +74,10 @@ function mapStateToProps(state, { post }) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-    togglePostModal: (postId) => dispatch(togglePostModal(postId)),
-    registerVotePost: (postId, option) => dispatch(sendVotePost(postId, option)),
-    deletePost: (postId) => dispatch(deletePost(postId))
+    registerVotePost: (postId, option) => dispatch(sendVotePost(postId, option))
   }
 }
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Post)
+)(Post))

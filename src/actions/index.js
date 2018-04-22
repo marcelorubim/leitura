@@ -6,14 +6,6 @@ export const SELECT_CATEGORY = 'SELECT_CATEGORY';
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 export const UPDATE_COMMENT = 'UPDATE_COMMENT';
 export const UPDATE_POST = 'UPDATE_POST';
-export const TOGGLE_POST_MODAL = 'TOGGLE_POST_MODAL';
-
-export function togglePostModal(postId) {
-    return {
-        type: TOGGLE_POST_MODAL,
-        payload: postId
-    };
-}
 
 function receiveComments(comments) {
     return {

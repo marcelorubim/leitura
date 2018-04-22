@@ -87,6 +87,7 @@ class ListComments extends Component {
     }
 }
 function mapStateToProps({ comments,posts }, { match }) {
+    console.log(comments)
     return {
         comments: Object.keys(comments).map((key) => comments[key]).filter((c) => c.parentId === match.params.postId && !c.deleted),
         postId: match.params.postId,

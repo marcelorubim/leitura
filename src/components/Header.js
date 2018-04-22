@@ -3,7 +3,6 @@ import { Menu, Button, Container } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ModalPost from './ModalPost'
-import { togglePostModal } from '../actions'
 
 
 class Header extends Component {
@@ -11,43 +10,43 @@ class Header extends Component {
         isModalOpened: false
     }
     render() {
-        const { activeCategory, categories, togglePostModal } = this.props;
+        const { categories } = this.props;
         return (
-            <Menu inverted>
-                <Container>
-                    <Menu.Item active={typeof activeCategory === 'undefined'}>
-                        <Link to='/' >All</Link>
-                    </Menu.Item>
-                    {categories.map((c, index) =>
-                        <Menu.Item key={index} active={activeCategory === c.name}>
-                            <Link to={`/${c.path}`}>{c.name}</Link>
+            <div style={{marginBottom:'3rem'}}>
+                <ModalPost open={this.state.isModalOpened} close={() => this.setState({ isModalOpened: false })} />
+                <Menu inverted>
+                    <Container>
+                        <Menu.Item active={categories.reduce((noneActive,category) => {
+                            if(category.active){
+                                return false
+                            }
+                            return noneActive
+                        },true)}>
+                            <Link to='/' >All</Link>
                         </Menu.Item>
-                    )}
-                    <Menu.Menu position='right'>
-                        <Menu.Item>
-                            <Button size='mini' primary onClick={(e) => togglePostModal()}> New Post</Button>
-                        </Menu.Item>
-                        <Menu.Item>
-                        </Menu.Item>
-                    </Menu.Menu>
-                </Container>
-                <ModalPost close={() => this.setState({ isModalOpened: false })} />
-            </Menu>
+                        {categories.map((c, index) =>
+                            <Menu.Item key={index} active={c.active}>
+                                <Link to={`/${c.path}`}>{c.name}</Link>
+                            </Menu.Item>
+                        )}
+                        <Menu.Menu position='right'>
+                            <Menu.Item>
+                                <Button size='mini' primary onClick={(e) => this.setState({ isModalOpened: true })}> New Post</Button>
+                            </Menu.Item>
+                            <Menu.Item>
+                            </Menu.Item>
+                        </Menu.Menu>
+                    </Container>
+                </Menu>
+            </div>
         )
     }
 }
-function mapStateToProps({ categories, activeCategory }) {
+function mapStateToProps({ categories }) {
     return {
-        categories,
-        activeCategory
-    }
-}
-function mapDispatchToProps(dispatch) {
-    return {
-        togglePostModal: () => dispatch(togglePostModal())
+        categories
     }
 }
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps    
 )(Header)
