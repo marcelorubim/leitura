@@ -5,7 +5,6 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const SELECT_CATEGORY = 'SELECT_CATEGORY';
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 export const UPDATE_COMMENT = 'UPDATE_COMMENT';
-export const UPDATE_POST = 'UPDATE_POST';
 
 function receiveComments(comments) {
     return {
