@@ -24,5 +24,8 @@
     "eject": "react-scripts eject",
     "server": "cd api-server && npm start"
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "http://localhost:3001",
+  "devDependencies": {
+    "jest-fetch-mock": "^1.5.0"
+  }  
 }
